@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Application</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="parties-container">
+            <div class="new-partie">
+                <input type="text" placeholder="1er joueur" onchange="{p1=target.value}">
+                <input type="text" placeholder="2eme joueur" onchange="{p2=target.value}">
+
+                <button class="add-button" onclick="addPartie()">Ajouter</button>
+            </div>
+            <div class="parties-list">
+                <% for(let partie of parties) {%>
+                    <div class="partie">
+                        <input type="radio">
+                        <span>$<%= partie.player1 %> VS $<%= partie.player2 %></span>
+                        <button class="delete-button" onclick="deletePartie(<%= partie._id %>)">x</button>
+                    </div>
+                    <% } %>
+
+            </div>
+            <div class="chat-container">
+                <div class="player-info">
+                    <input type="text" placeholder="Nom du joueur">
+                    <img src="profile-photo.jpg" alt="Profile Photo">
+                </div>
+                <div class="message-list">
+                    <% for(let message of messages) {%>
+                        <div class="message">$<%= message.writer %> : $<%= message.contenu %>
+                        </div>
+                        <% } %>
+                </div>
+                <div class="message-input">
+                    <input type="text" placeholder="Écrire un message" onchange="{msg=target.value}">
+                    <button class="send-button" onclick="addmessage()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var p1 = ""
+            var p2 = ""
+            var msg = ''
+
+            function deletePartie(id) {
+                try {
+                    const del = await axios.delete("http://localhost:3031/delite/" + id)
+
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+
+            function addPartie(p1, p2) {
+                try {
+                    const add = await axios.post("http://localhost:3031/addpartie", { p1, p2 })
+
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+
+
+            function addmessage(id, msg) {
+                try {
+                    const del = await axios.delete("http://localhost:3031/addmessage", { id, msg })
+
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        </script>
+
+
+
+
+
+</body>
+
+</html>
